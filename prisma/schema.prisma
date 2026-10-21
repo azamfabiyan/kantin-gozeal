@@ -1,0 +1,83 @@
+// Kantin Gozeal - Sistem Manajemen Jatah Makanan & Minuman Karyawan
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Employee {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  dateOfBirth String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  pickups     Pickup[]
+}
+
+model Variant {
+  id          String        @id @default(cuid())
+  name        String
+  type        String
+  stock       Int
+  initialStock Int
+  active      Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  pickups     Pickup[]
+  stockHistory StockHistory[]
+}
+
+model Pickup {
+  id         String   @id @default(cuid())
+  employeeId String
+  variantId  String
+  type       String
+  period     String
+  timestamp  DateTime @default(now())
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  variant    Variant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@unique([employeeId, variantId, period])
+  @@index([employeeId, period])
+  @@index([period])
+}
+
+model PeriodSetting {
+  id            String   @id @default(cuid())
+  currentPeriod String   @unique
+  startedAt     DateTime @default(now())
+  resetBy       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model StockHistory {
+  id         String   @id @default(cuid())
+  variantId  String
+  changeType String
+  amount     Int
+  oldStock   Int
+  newStock   Int
+  note       String?
+  changedBy  String
+  createdAt  DateTime @default(now())
+  variant    Variant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@index([variantId])
+  @@index([createdAt])
+}
