@@ -295,7 +295,7 @@ function VariantCard({
             </Badge>
           ) : (
             <Badge variant="outline">
-              Tersedia
+              {variant.balance}
             </Badge>
           )}
         </div>
