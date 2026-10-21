@@ -286,7 +286,7 @@ function VariantCard({
           </span>
           {variant.balance <= 0 ? (
             <Badge variant="secondary">
-              Saldo Habis
+              Sudah Diambil
             </Badge>
           ) : variant.stock <= 0 ? (
             <Badge variant="destructive">
@@ -295,7 +295,7 @@ function VariantCard({
             </Badge>
           ) : (
             <Badge variant="outline">
-              Saldo: {variant.balance}
+              Tersedia
             </Badge>
           )}
         </div>
@@ -309,9 +309,9 @@ function VariantCard({
           onClick={() => onPickup(variant)}
         >
           {!canTake ? (
-            variant.balance <= 0 ? 'Saldo Habis' : 'Stok Habis'
+            variant.balance <= 0 ? 'Sudah Diambil' : 'Stok Habis'
           ) : (
-            <>Ambil{variant.balance > 1 ? ` (${variant.balance} saldo)` : ''}</>
+            'Ambil'
           )}
         </Button>
       </CardContent>
