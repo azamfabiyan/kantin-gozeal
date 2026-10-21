@@ -33,13 +33,14 @@ export function DateOfBirthPicker({
   required,
   className,
 }: DateOfBirthPickerProps) {
+  // Fully controlled - derive day/month/year from value prop
   const parsed = useMemo(() => parseDateOfBirth(value), [value])
-  const day = parsed?.day || 0
-  const month = parsed?.month || 0
-  const year = parsed?.year || 0
+  const day = parsed?.day ? String(parsed.day) : ''
+  const month = parsed?.month ? String(parsed.month) : ''
+  const year = parsed?.year ? String(parsed.year) : ''
 
-  const effectiveYear = year || currentYear
-  const effectiveMonth = month || 1
+  const effectiveYear = year ? Number(year) : currentYear
+  const effectiveMonth = month ? Number(month) : 1
   const maxDays = month ? getDaysInMonth(effectiveYear, effectiveMonth) : 31
 
   const years = useMemo(() => {
@@ -56,17 +57,41 @@ export function DateOfBirthPicker({
 
   const allSelected = !!(day && month && year)
 
-  const buildDateString = (d: number, m: number, y: number): string => {
-    if (d && m && y) return `${y}-${pad2(m)}-${pad2(d)}`
-    return ''
+  // Helper to emit new value to parent
+  const emitChange = (newDay: string, newMonth: string, newYear: string) => {
+    if (newDay && newMonth && newYear) {
+      onChange(`${newYear}-${pad2(Number(newMonth))}-${pad2(Number(newDay))}`)
+    } else {
+      onChange('')
+    }
   }
 
-  // Use native HTML select for maximum mobile compatibility
+  // Handlers - simple, just emit
+  const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    emitChange(e.target.value, month, year)
+  }
+
+  const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newMonth = e.target.value
+    // Validate day against new month
+    const daysInM = getDaysInMonth(year ? Number(year) : currentYear, Number(newMonth))
+    const effectiveDay = day && Number(day) > daysInM ? String(daysInM) : day
+    emitChange(effectiveDay, newMonth, year)
+  }
+
+  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newYear = e.target.value
+    // Validate day against new year
+    const m = month ? Number(month) : 1
+    const daysInY = getDaysInMonth(Number(newYear), m)
+    const effectiveDay = day && Number(day) > daysInY ? String(daysInY) : day
+    emitChange(effectiveDay, month, newYear)
+  }
+
   const selectClass = cn(
-    'flex h-11 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-base',
+    'flex h-11 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-base',
     'ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-    'disabled:cursor-not-allowed disabled:opacity-50',
-    'appearance-none bg-[url("data:image/svg+xml,%3Csvg%20xmlns=' + "'http://www.w3.org/2000/svg'%20width='12'%20height='12'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='currentColor'%20stroke-width='2'%3E%3Cpath%20d='M6%209l6%206%206-6'/%3E%3C/svg%3E" + '")] bg-no-repeat bg-[right_0.75rem_center] pr-9',
+    'disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer',
   )
 
   return (
@@ -80,17 +105,12 @@ export function DateOfBirthPicker({
       <div className="grid grid-cols-3 gap-2">
         {/* Day */}
         <select
-          value={day || ''}
-          onChange={(e) => {
-            const d = Number(e.target.value)
-            if (!d) return
-            const safeDay = Math.min(d, maxDays)
-            onChange(buildDateString(safeDay, month, year))
-          }}
+          value={day}
+          onChange={handleDayChange}
           className={selectClass}
           aria-label="Tanggal"
         >
-          <option value="" disabled>Tanggal</option>
+          <option value="">Tanggal</option>
           {days.map((d) => (
             <option key={d} value={d}>{d}</option>
           ))}
@@ -98,18 +118,12 @@ export function DateOfBirthPicker({
 
         {/* Month */}
         <select
-          value={month || ''}
-          onChange={(e) => {
-            const m = Number(e.target.value)
-            if (!m) return
-            const daysInM = getDaysInMonth(year || currentYear, m)
-            const safeDay = day > daysInM ? daysInM : (day || 0)
-            onChange(buildDateString(safeDay, m, year))
-          }}
+          value={month}
+          onChange={handleMonthChange}
           className={selectClass}
           aria-label="Bulan"
         >
-          <option value="" disabled>Bulan</option>
+          <option value="">Bulan</option>
           {MONTHS.map((m, i) => (
             <option key={i + 1} value={i + 1}>{m}</option>
           ))}
@@ -117,29 +131,22 @@ export function DateOfBirthPicker({
 
         {/* Year */}
         <select
-          value={year || ''}
-          onChange={(e) => {
-            const y = Number(e.target.value)
-            if (!y) return
-            const m = month || 1
-            const daysInY = getDaysInMonth(y, m)
-            const safeDay = day > daysInY ? daysInY : (day || 0)
-            onChange(buildDateString(safeDay, month, y))
-          }}
+          value={year}
+          onChange={handleYearChange}
           className={selectClass}
           aria-label="Tahun"
         >
-          <option value="" disabled>Tahun</option>
+          <option value="">Tahun</option>
           {years.map((y) => (
             <option key={y} value={y}>{y}</option>
           ))}
         </select>
       </div>
       {allSelected ? (
-        <p className="text-xs text-slate-700 dark:text-slate-300">
+        <p className="text-xs text-emerald-700 dark:text-emerald-400">
           ✓ Tanggal terpilih: {formatDateOfBirth(value)}
-          {month === 2 && day === 29 && !isLeapYear(year) ? (
-            <span className="ml-1 text-slate-600">(Bukan tahun kabisat)</span>
+          {month === '2' && day === '29' && !isLeapYear(Number(year)) ? (
+            <span className="ml-1 text-amber-600">(Bukan tahun kabisat)</span>
           ) : null}
         </p>
       ) : (

@@ -28,10 +28,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { DateOfBirthPicker } from './DateOfBirthPicker'
 import {
   Search, Plus, Pencil, Trash2, Utensils, CupSoda, Info, Users, Loader2,
-  Calendar, UserCheck, UserX, Cake, X, Check,
+  UserCheck, UserX, Cake, Check,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useWebSocket } from '@/hooks/use-websocket'
@@ -48,10 +47,8 @@ export function AdminEmployees() {
   const [editTarget, setEditTarget] = useState<EmployeeWithPickups | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<EmployeeWithPickups | null>(null)
-  const [quickDobTarget, setQuickDobTarget] = useState<EmployeeWithPickups | null>(null)
-  const [quickDobValue, setQuickDobValue] = useState('')
-  const [quickDobSaving, setQuickDobSaving] = useState(false)
-  const [form, setForm] = useState<{ name: string; dateOfBirth: string; active: boolean }>({ name: '', dateOfBirth: '', active: true })
+  // Form hanya nama + active (TANPA dateOfBirth - karyawan isi sendiri saat login pertama)
+  const [form, setForm] = useState<{ name: string; active: boolean }>({ name: '', active: true })
   const [saving, setSaving] = useState(false)
 
   const fetchData = useCallback(async () => {
@@ -98,43 +95,14 @@ export function AdminEmployees() {
 
   const openAdd = () => {
     setEditTarget(null)
-    setForm({ name: '', dateOfBirth: '', active: true })
+    setForm({ name: '', active: true })
     setDialogOpen(true)
   }
 
   const openEdit = (emp: EmployeeWithPickups) => {
     setEditTarget(emp)
-    setForm({ name: emp.name, dateOfBirth: emp.dateOfBirth || '', active: emp.active })
+    setForm({ name: emp.name, active: emp.active })
     setDialogOpen(true)
-  }
-
-  const openQuickDob = (emp: EmployeeWithPickups) => {
-    setQuickDobTarget(emp)
-    setQuickDobValue(emp.dateOfBirth || '')
-  }
-
-  const handleQuickDobSave = async () => {
-    if (!quickDobTarget) return
-    if (!quickDobValue) {
-      toast.error('Tanggal lahir wajib diisi')
-      return
-    }
-    setQuickDobSaving(true)
-    try {
-      await api.updateEmployee(quickDobTarget.id, {
-        name: quickDobTarget.name,
-        dateOfBirth: quickDobValue,
-        active: quickDobTarget.active,
-      })
-      toast.success(`Tanggal lahir ${quickDobTarget.name} diperbarui`)
-      setQuickDobTarget(null)
-      setQuickDobValue('')
-      await fetchData()
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Gagal menyimpan')
-    } finally {
-      setQuickDobSaving(false)
-    }
   }
 
   const handleSave = async () => {
@@ -194,8 +162,7 @@ export function AdminEmployees() {
           </div>
           <Button onClick={openAdd} size="sm" className="brand-gradient text-white shrink-0">
             <Plus className="w-4 h-4 mr-1" />
-            <span className="hidden sm:inline">Tambah</span>
-            <span className="sm:hidden">Tambah</span>
+            Tambah
           </Button>
         </div>
 
@@ -224,10 +191,10 @@ export function AdminEmployees() {
           </div>
           <div className="bg-card border rounded-lg p-2 sm:p-3">
             <div className="flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
+              <UserX className="w-3.5 h-3.5 text-muted-foreground" />
               <span className="text-[10px] sm:text-xs text-muted-foreground font-medium">Belum DOB</span>
             </div>
-            <p className="text-lg sm:text-xl font-bold mt-0.5 text-amber-600 dark:text-amber-400">{stats.withoutDob}</p>
+            <p className="text-lg sm:text-xl font-bold mt-0.5">{stats.withoutDob}</p>
           </div>
         </div>
 
@@ -276,8 +243,8 @@ export function AdminEmployees() {
                         </Badge>
                       )}
                       {!e.dateOfBirth && (
-                        <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 border-amber-300 text-amber-700 dark:text-amber-400">
-                          <Calendar className="w-2.5 h-2.5 mr-0.5" /> Belum DOB
+                        <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5">
+                          Belum DOB
                         </Badge>
                       )}
                     </div>
@@ -291,25 +258,16 @@ export function AdminEmployees() {
                         <CupSoda className="w-3 h-3" />
                         {e.drinkPickups}/4
                       </span>
-                      <span className="flex items-center gap-1">
-                        <Cake className="w-3 h-3" />
-                        {e.dateOfBirth ? formatDateOfBirth(e.dateOfBirth) : '—'}
-                      </span>
+                      {e.dateOfBirth && (
+                        <span className="flex items-center gap-1">
+                          <Cake className="w-3 h-3" />
+                          {formatDateOfBirth(e.dateOfBirth)}
+                        </span>
+                      )}
                     </div>
                   </div>
-                  {/* Right: Actions */}
+                  {/* Right: Actions - hanya Edit & Hapus (TANPA tombol DOB) */}
                   <div className="flex items-center gap-1 shrink-0">
-                    {/* Quick Edit DOB - prominent button */}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="icon-btn h-8 px-2 text-xs"
-                      onClick={() => openQuickDob(e)}
-                      title="Edit Tanggal Lahir"
-                    >
-                      <Cake className="w-3.5 h-3.5 mr-1" />
-                      <span className="hidden sm:inline">DOB</span>
-                    </Button>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -339,49 +297,12 @@ export function AdminEmployees() {
         <div className="flex items-start gap-2 p-2.5 rounded-md bg-muted/50 text-xs text-muted-foreground">
           <Info className="w-3.5 h-3.5 shrink-0 mt-0.5" />
           <p>
-            Klik tombol <strong>DOB</strong> untuk edit tanggal lahir karyawan. Karyawan yang belum punya DOB akan disuruh isi sendiri saat login pertama.
+            Karyawan mengisi tanggal lahir sendiri saat login pertama. Tanggal lahir disimpan otomatis dan digunakan untuk login berikutnya.
           </p>
         </div>
       </div>
 
-      {/* Quick Edit DOB Dialog */}
-      <Dialog open={!!quickDobTarget} onOpenChange={(open) => {
-        if (!open) {
-          setQuickDobTarget(null)
-          setQuickDobValue('')
-        }
-      }}>
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-base">
-              <Cake className="w-4 h-4" /> Edit Tanggal Lahir
-            </DialogTitle>
-            <DialogDescription>
-              Karyawan: <strong>{quickDobTarget?.name}</strong>
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-2">
-            <DateOfBirthPicker
-              value={quickDobValue}
-              onChange={setQuickDobValue}
-              label="Tanggal Lahir"
-              required
-              description={quickDobTarget?.dateOfBirth ? 'Ubah tanggal lahir karyawan' : 'Set tanggal lahir untuk karyawan ini'}
-            />
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => { setQuickDobTarget(null); setQuickDobValue('') }} disabled={quickDobSaving}>
-              Batal
-            </Button>
-            <Button onClick={handleQuickDobSave} disabled={quickDobSaving || !quickDobValue} className="brand-gradient text-white">
-              {quickDobSaving ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Check className="w-4 h-4 mr-1.5" />}
-              Simpan DOB
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Add/Edit dialog */}
+      {/* Add/Edit dialog - TANPA DateOfBirthPicker */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
@@ -400,11 +321,6 @@ export function AdminEmployees() {
                 className="h-10"
               />
             </div>
-            <DateOfBirthPicker
-              value={form.dateOfBirth}
-              onChange={(v) => setForm({ ...form, dateOfBirth: v })}
-              description="Kosongkan jika karyawan akan mengisi sendiri saat login pertama"
-            />
             <div className="flex items-center justify-between gap-2 p-2.5 rounded-md bg-muted/50">
               <div>
                 <label className="text-sm font-medium">Status Aktif</label>
