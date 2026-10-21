@@ -241,7 +241,7 @@ export function EmployeeDashboard() {
               Apakah Anda yakin ingin mengambil: <strong className="text-foreground">{pickupTarget?.name}</strong>?
               <br /><br />
               <span className="text-slate-600 dark:text-slate-400">
-                ⚠️ Setelah diambil, Anda tidak bisa mengganti atau membatalkan pilihan ini di periode {pickupTarget && formatPeriod(data?.activePeriod || '')}.
+                ⚠️ Setelah diambil, saldo {pickupTarget?.name} akan berkurang 1. Sisa saldo tersisa bisa dipakai di periode ini atau carry over ke periode berikutnya.
               </span>
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -271,8 +271,9 @@ function VariantCard({
   period: string
 }) {
   const isFood = variant.type === 'FOOD'
+  const canTake = variant.balance > 0 && variant.stock > 0
   return (
-    <Card className={cn('flex flex-col', variant.status === 'taken' && 'opacity-70')}>
+    <Card className={cn('flex flex-col', !canTake && 'opacity-70')}>
       <CardContent className="p-3 sm:p-4 flex flex-col gap-2 flex-1">
         <div className="flex items-start justify-between gap-2">
           <span className="font-semibold text-sm sm:text-base line-clamp-2">{variant.name}</span>
@@ -283,18 +284,19 @@ function VariantCard({
               {variant.stock}
             </span>
           </span>
-          {variant.status === 'taken' ? (
-            <Badge className="bg-slate-200 text-slate-700 dark:bg-slate-700/40 dark:text-slate-300">
-              <CheckCircle2 className="w-3 h-3 mr-1" />
-              Sudah Diambil
+          {variant.balance <= 0 ? (
+            <Badge variant="secondary">
+              Saldo Habis
             </Badge>
-          ) : variant.status === 'out_of_stock' ? (
+          ) : variant.stock <= 0 ? (
             <Badge variant="destructive">
               <PackageX className="w-3 h-3 mr-1" />
               Habis
             </Badge>
           ) : (
-            <Badge variant="secondary">Tersedia</Badge>
+            <Badge variant="outline">
+              Saldo: {variant.balance}
+            </Badge>
           )}
         </div>
         <Button
@@ -303,17 +305,13 @@ function VariantCard({
             'mt-auto w-full',
             isFood ? 'bg-slate-700 hover:bg-slate-800' : 'bg-slate-600 hover:bg-slate-700',
           )}
-          disabled={variant.status !== 'available'}
+          disabled={!canTake}
           onClick={() => onPickup(variant)}
         >
-          {variant.status === 'taken' ? (
-            <>
-              <Lock className="w-3.5 h-3.5 mr-1" /> Terkunci
-            </>
-          ) : variant.status === 'out_of_stock' ? (
-            'Habis'
+          {!canTake ? (
+            variant.balance <= 0 ? 'Saldo Habis' : 'Stok Habis'
           ) : (
-            'Ambil'
+            <>Ambil{variant.balance > 1 ? ` (${variant.balance} saldo)` : ''}</>
           )}
         </Button>
       </CardContent>

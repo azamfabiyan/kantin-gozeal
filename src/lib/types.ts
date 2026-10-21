@@ -40,7 +40,8 @@ export interface PickupInfo {
 export interface VariantWithStatus extends VariantInfo {
   taken: boolean
   takenCount: number
-  status: 'available' | 'taken' | 'out_of_stock'
+  balance: number
+  status: 'available' | 'taken' | 'out_of_stock' | 'no_balance'
 }
 
 export interface DashboardStats {

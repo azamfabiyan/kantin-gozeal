@@ -155,17 +155,38 @@ export async function resetCurrentPeriod(resetBy: string): Promise<void> {
       },
     })
   }
+  // Reset all EmployeeBalance to 1 (fresh start, pickup records deleted)
+  const employees = await db.employee.findMany({ where: { active: true } })
+  for (const emp of employees) {
+    for (const v of variants) {
+      await db.employeeBalance.upsert({
+        where: { employeeId_variantId: { employeeId: emp.id, variantId: v.id } },
+        update: { balance: 1 },
+        create: { employeeId: emp.id, variantId: v.id, balance: 1 },
+      })
+    }
+  }
 }
 
 export async function startNewPeriod(resetBy: string): Promise<string> {
-  const now = new Date()
-  const year = now.getFullYear()
-  const month = String(now.getMonth() + 1).padStart(2, '0')
-  const current = `${year}-${month}`
-  // Mark previous setting inactive (just create new)
-  await db.periodSetting.create({
-    data: { currentPeriod: current, resetBy },
+  // Get current active period from DB
+  const currentSetting = await db.periodSetting.findFirst({
+    orderBy: { createdAt: 'desc' },
   })
+  const currentActivePeriod = currentSetting?.currentPeriod || getCurrentPeriod()
+  
+  // Calculate NEXT period from current active period
+  const [y, m] = currentActivePeriod.split('-').map(Number)
+  const nextDate = new Date(y, m, 1) // month is 0-based, so m = next month
+  const nextPeriod = `${nextDate.getFullYear()}-${String(nextDate.getMonth() + 1).padStart(2, '0')}`
+  
+  // Create new period setting (or upsert if somehow exists)
+  await db.periodSetting.upsert({
+    where: { currentPeriod: nextPeriod },
+    update: { startedAt: new Date(), resetBy, updatedAt: new Date() },
+    create: { currentPeriod: nextPeriod, resetBy },
+  })
+  
   // Reset variant stocks to initialStock for new period
   const variants = await db.variant.findMany()
   for (const v of variants) {
@@ -177,12 +198,24 @@ export async function startNewPeriod(resetBy: string): Promise<string> {
         amount: v.initialStock - v.stock,
         oldStock: v.stock,
         newStock: v.initialStock,
-        note: `Mulai periode baru ${current}`,
+        note: `Mulai periode baru ${nextPeriod}`,
         changedBy: resetBy,
       },
     })
   }
-  return current
+  // CARRY-OVER: Add +1 balance to all employees × variants
+  // Saldo yang tidak dipakai di periode lama menumpuk ke periode baru
+  const employees = await db.employee.findMany({ where: { active: true } })
+  for (const emp of employees) {
+    for (const v of variants) {
+      await db.employeeBalance.upsert({
+        where: { employeeId_variantId: { employeeId: emp.id, variantId: v.id } },
+        update: { balance: { increment: 1 } },
+        create: { employeeId: emp.id, variantId: v.id, balance: 1 },
+      })
+    }
+  }
+  return nextPeriod
 }
 
 // ===== Date helpers (shared) =====

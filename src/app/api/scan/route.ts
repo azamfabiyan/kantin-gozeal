@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
 
   const activePeriod = await getActivePeriod()
 
-  const [employee, variants, pickups] = await Promise.all([
+  const [employee, variants, pickups, balances] = await Promise.all([
     db.employee.findUnique({ where: { id: employeeId } }),
     db.variant.findMany({ where: { active: true }, orderBy: { type: 'asc' } }),
     db.pickup.findMany({
@@ -20,18 +20,21 @@ export async function GET(req: NextRequest) {
       include: { variant: true },
       orderBy: { timestamp: 'desc' },
     }),
+    db.employeeBalance.findMany({ where: { employeeId } }),
   ])
 
   if (!employee) return Response.json({ error: 'Karyawan tidak ditemukan' }, { status: 404 })
 
-  const takenVariantIds = new Set(pickups.map((p) => p.variantId))
+  // Build balance map: variantId -> balance
+  const balanceMap = new Map(balances.map((b) => [b.variantId, b.balance]))
+
   const foodTaken = pickups.filter((p) => p.type === 'FOOD').length
   const drinkTaken = pickups.filter((p) => p.type === 'DRINK').length
 
   const mapVariant = (v: typeof variants[number]): VariantWithStatus => {
-    const taken = takenVariantIds.has(v.id)
+    const balance = balanceMap.get(v.id) ?? 0
     let status: VariantWithStatus['status'] = 'available'
-    if (taken) status = 'taken'
+    if (balance <= 0) status = 'no_balance'
     else if (v.stock <= 0) status = 'out_of_stock'
     return {
       id: v.id,
@@ -41,8 +44,9 @@ export async function GET(req: NextRequest) {
       initialStock: v.initialStock,
       active: v.active,
       createdAt: v.createdAt.toISOString(),
-      taken,
+      taken: false, // tidak dipakai lagi, tetap ada untuk backward compat
       takenCount: 0,
+      balance,
       status,
     }
   }

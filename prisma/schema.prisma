@@ -1,4 +1,5 @@
 // Kantin Gozeal - Sistem Manajemen Jatah Makanan & Minuman Karyawan
+// v7: Carry-over balance system (saldo menumpuk ke periode berikutnya)
 
 generator client {
   provider = "prisma-client-js"
@@ -19,27 +20,29 @@ model Admin {
 }
 
 model Employee {
-  id          String   @id @default(cuid())
-  code        String   @unique
+  id          String            @id @default(cuid())
+  code        String            @unique
   name        String
   dateOfBirth String?
-  active      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  active      Boolean           @default(true)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
   pickups     Pickup[]
+  balances    EmployeeBalance[]
 }
 
 model Variant {
-  id          String        @id @default(cuid())
-  name        String
-  type        String
-  stock       Int
+  id           String            @id @default(cuid())
+  name         String
+  type         String
+  stock        Int
   initialStock Int
-  active      Boolean       @default(true)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  pickups     Pickup[]
+  active       Boolean           @default(true)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  pickups      Pickup[]
   stockHistory StockHistory[]
+  balances     EmployeeBalance[]
 }
 
 model Pickup {
@@ -52,9 +55,25 @@ model Pickup {
   employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
   variant    Variant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
 
-  @@unique([employeeId, variantId, period])
+  // NOTE: unique constraint REMOVED - now using EmployeeBalance for carry-over
   @@index([employeeId, period])
   @@index([period])
+  @@index([variantId, period])
+}
+
+model EmployeeBalance {
+  id         String   @id @default(cuid())
+  employeeId String
+  variantId  String
+  balance    Int      @default(0) // Saldo tersisa (carry-over, menumpuk)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  variant    Variant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@unique([employeeId, variantId])
+  @@index([employeeId])
+  @@index([variantId])
 }
 
 model PeriodSetting {

@@ -6,14 +6,12 @@ import { broadcastEvent } from '@/lib/ws-broadcast'
 export const dynamic = 'force-dynamic'
 
 export async function GET(req: NextRequest) {
-  // Return pickups for an employee (all periods if employeeId query param)
   const emp = await getEmployeeFromRequest(req)
   if (!emp) return Response.json({ error: 'Unauthorized' }, { status: 401 })
 
   const { searchParams } = new URL(req.url)
   const employeeId = searchParams.get('employeeId') || emp.id
 
-  // Allow admin to query any employee? For now keep employee-scoped
   if (employeeId !== emp.id) {
     return Response.json({ error: 'Forbidden' }, { status: 403 })
   }
@@ -59,27 +57,20 @@ export async function POST(req: NextRequest) {
       // Check stock
       if (variant.stock <= 0) throw new Error('Stok habis')
 
-      // Check 1-per-variant-per-period
-      const existing = await tx.pickup.findUnique({
+      // Check EmployeeBalance (carry-over system)
+      const balance = await tx.employeeBalance.findUnique({
         where: {
-          employeeId_variantId_period: {
+          employeeId_variantId: {
             employeeId: emp.id,
             variantId: variant.id,
-            period,
           },
         },
       })
-      if (existing) throw new Error(`Anda sudah mengambil ${variant.name} di periode ini`)
-
-      // Check max 10 per period
-      const countInPeriod = await tx.pickup.count({
-        where: { employeeId: emp.id, period },
-      })
-      if (countInPeriod >= 10) {
-        throw new Error('Anda sudah mencapai batas maksimal 10 pengambilan periode ini')
+      if (!balance || balance.balance <= 0) {
+        throw new Error(`Saldo ${variant.name} habis. Tunggu periode berikutnya untuk dapat saldo baru.`)
       }
 
-      // Create pickup, decrement stock, record history
+      // Create pickup, decrement stock, decrement balance, record history
       const [pickup] = await Promise.all([
         tx.pickup.create({
           data: {
@@ -92,6 +83,10 @@ export async function POST(req: NextRequest) {
         tx.variant.update({
           where: { id: variant.id },
           data: { stock: variant.stock - 1 },
+        }),
+        tx.employeeBalance.update({
+          where: { id: balance.id },
+          data: { balance: balance.balance - 1 },
         }),
         tx.stockHistory.create({
           data: {
