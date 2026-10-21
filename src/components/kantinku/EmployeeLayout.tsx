@@ -20,7 +20,7 @@ export function EmployeeLayout({ children, title, showBackToLogin }: EmployeeLay
         <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="bg-white rounded-md p-1 flex items-center">
-              <Image src="/gozeal-logo.png" alt="Kantin Gozeal" width={80} height={18} priority />
+              <Image src="/gozeal-logo.png" alt="Kantin Gozeal" width={56} height={40} priority />
             </div>
             {title && (
               <span className="text-sm sm:text-base font-semibold hidden xs:inline sm:inline">

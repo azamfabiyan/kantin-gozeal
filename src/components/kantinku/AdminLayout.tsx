@@ -43,7 +43,7 @@ export function AdminLayout({ children, title, activeTab }: AdminLayoutProps) {
           <div className="flex items-center justify-between py-3">
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="bg-white rounded-md p-1 flex items-center">
-                <Image src="/gozeal-logo.png" alt="Kantin Gozeal" width={80} height={18} priority />
+                <Image src="/gozeal-logo.png" alt="Kantin Gozeal" width={56} height={40} priority />
               </div>
               <span className="text-sm sm:text-base font-semibold hidden sm:inline">{title}</span>
             </div>

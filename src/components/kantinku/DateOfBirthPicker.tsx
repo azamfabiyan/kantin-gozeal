@@ -1,8 +1,8 @@
 'use client'
 
 import { Label } from '@/components/ui/label'
-import { useMemo } from 'react'
-import { getDaysInMonth, isLeapYear, parseDateOfBirth, formatDateOfBirth } from '@/lib/auth-client'
+import { useState, useMemo } from 'react'
+import { getDaysInMonth, isLeapYear, parseDateOfBirth } from '@/lib/auth-client'
 import { cn } from '@/lib/utils'
 
 interface DateOfBirthPickerProps {
@@ -33,11 +33,20 @@ export function DateOfBirthPicker({
   required,
   className,
 }: DateOfBirthPickerProps) {
-  // Fully controlled - derive day/month/year from value prop
-  const parsed = useMemo(() => parseDateOfBirth(value), [value])
-  const day = parsed?.day ? String(parsed.day) : ''
-  const month = parsed?.month ? String(parsed.month) : ''
-  const year = parsed?.year ? String(parsed.year) : ''
+  // Local state - initialized once from value prop via useState initializer
+  // User selects each field independently, then we emit combined value
+  const [day, setDay] = useState<string>(() => {
+    const p = parseDateOfBirth(value)
+    return p?.day ? String(p.day) : ''
+  })
+  const [month, setMonth] = useState<string>(() => {
+    const p = parseDateOfBirth(value)
+    return p?.month ? String(p.month) : ''
+  })
+  const [year, setYear] = useState<string>(() => {
+    const p = parseDateOfBirth(value)
+    return p?.year ? String(p.year) : ''
+  })
 
   const effectiveYear = year ? Number(year) : currentYear
   const effectiveMonth = month ? Number(month) : 1
@@ -57,35 +66,46 @@ export function DateOfBirthPicker({
 
   const allSelected = !!(day && month && year)
 
-  // Helper to emit new value to parent
-  const emitChange = (newDay: string, newMonth: string, newYear: string) => {
-    if (newDay && newMonth && newYear) {
-      onChange(`${newYear}-${pad2(Number(newMonth))}-${pad2(Number(newDay))}`)
+  // Emit combined value to parent only when all 3 fields are selected
+  const emitIfComplete = (d: string, m: string, y: string) => {
+    if (d && m && y) {
+      onChange(`${y}-${pad2(Number(m))}-${pad2(Number(d))}`)
     } else {
-      onChange('')
+      onChange('') // not complete yet
     }
   }
 
-  // Handlers - simple, just emit
   const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    emitChange(e.target.value, month, year)
+    const newDay = e.target.value
+    setDay(newDay)
+    emitIfComplete(newDay, month, year)
   }
 
   const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newMonth = e.target.value
+    setMonth(newMonth)
     // Validate day against new month
     const daysInM = getDaysInMonth(year ? Number(year) : currentYear, Number(newMonth))
-    const effectiveDay = day && Number(day) > daysInM ? String(daysInM) : day
-    emitChange(effectiveDay, newMonth, year)
+    let effectiveDay = day
+    if (day && Number(day) > daysInM) {
+      effectiveDay = String(daysInM)
+      setDay(effectiveDay)
+    }
+    emitIfComplete(effectiveDay, newMonth, year)
   }
 
   const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newYear = e.target.value
+    setYear(newYear)
     // Validate day against new year
     const m = month ? Number(month) : 1
     const daysInY = getDaysInMonth(Number(newYear), m)
-    const effectiveDay = day && Number(day) > daysInY ? String(daysInY) : day
-    emitChange(effectiveDay, month, newYear)
+    let effectiveDay = day
+    if (day && Number(day) > daysInY) {
+      effectiveDay = String(daysInY)
+      setDay(effectiveDay)
+    }
+    emitIfComplete(effectiveDay, month, newYear)
   }
 
   const selectClass = cn(
@@ -144,7 +164,7 @@ export function DateOfBirthPicker({
       </div>
       {allSelected ? (
         <p className="text-xs text-emerald-700 dark:text-emerald-400">
-          ✓ Tanggal terpilih: {formatDateOfBirth(value)}
+          ✓ Tanggal terpilih: {day} {MONTHS[Number(month) - 1]} {year}
           {month === '2' && day === '29' && !isLeapYear(Number(year)) ? (
             <span className="ml-1 text-amber-600">(Bukan tahun kabisat)</span>
           ) : null}
