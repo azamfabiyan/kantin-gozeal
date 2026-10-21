@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Progress } from '@/components/ui/progress'
+import { Input } from '@/components/ui/input'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,7 +24,7 @@ import {
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend,
 } from 'recharts'
-import { Users, Package, PackageX, AlertTriangle, RefreshCw, RotateCcw, Utensils, CupSoda, Activity } from 'lucide-react'
+import { Users, Package, PackageX, AlertTriangle, RefreshCw, RotateCcw, Utensils, CupSoda, Activity, Calendar, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useWebSocket } from '@/hooks/use-websocket'
 import { formatPeriod, formatTimestamp } from '@/lib/auth-client'
@@ -36,6 +38,9 @@ export function AdminDashboard() {
   const [loading, setLoading] = useState(true)
   const [resetOpen, setResetOpen] = useState(false)
   const [resetMode, setResetMode] = useState<'current' | 'next'>('current')
+  const [setPeriodOpen, setSetPeriodOpen] = useState(false)
+  const [periodInput, setPeriodInput] = useState('')
+  const [periodSaving, setPeriodSaving] = useState(false)
   const [resetting, setResetting] = useState(false)
 
   const fetchData = useCallback(async () => {
@@ -113,6 +118,10 @@ export function AdminDashboard() {
             <Button variant="outline" size="sm" onClick={fetchData} disabled={loading}>
               <RefreshCw className={cn('w-4 h-4 mr-1.5', loading && 'animate-spin')} />
               Refresh
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setSetPeriodOpen(true)}>
+              <Calendar className="w-4 h-4 mr-1.5" />
+              Atur Periode
             </Button>
             <Button variant="default" size="sm" onClick={() => setResetOpen(true)} className="brand-gradient text-white">
               <RotateCcw className="w-4 h-4 mr-1.5" />
@@ -274,6 +283,66 @@ export function AdminDashboard() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Set Period Dialog */}
+      <Dialog open={setPeriodOpen} onOpenChange={setSetPeriodOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-base">
+              <Calendar className="w-4 h-4" /> Atur Periode
+            </DialogTitle>
+            <DialogDescription className="text-xs">
+              Atur periode aktif secara manual. Format: YYYY-MM (contoh: 2026-10)
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-2 space-y-3">
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">Periode (YYYY-MM)</label>
+              <Input
+                type="month"
+                value={periodInput}
+                onChange={(e) => setPeriodInput(e.target.value)}
+                className="h-10"
+                placeholder="2026-10"
+              />
+            </div>
+            <div className="p-2.5 rounded-md bg-muted/50 text-xs text-muted-foreground">
+              <p>Periode saat ini: <strong>{stats ? stats.activePeriod : '...'}</strong></p>
+              <p className="mt-1">Atur periode untuk mengubah bulan aktif. Data pickup tetap tersimpan.</p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setSetPeriodOpen(false); setPeriodInput('') }} disabled={periodSaving}>
+              Batal
+            </Button>
+            <Button
+              onClick={async () => {
+                if (!periodInput) {
+                  toast.error('Pilih periode terlebih dahulu')
+                  return
+                }
+                setPeriodSaving(true)
+                try {
+                  await api.setPeriod(periodInput)
+                  toast.success(`Periode diatur ke ${periodInput}`)
+                  setSetPeriodOpen(false)
+                  setPeriodInput('')
+                  await fetchData()
+                } catch (err) {
+                  toast.error(err instanceof Error ? err.message : 'Gagal mengatur periode')
+                } finally {
+                  setPeriodSaving(false)
+                }
+              }}
+              disabled={periodSaving || !periodInput}
+              className="brand-gradient text-white"
+            >
+              {periodSaving ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Calendar className="w-4 h-4 mr-1.5" />}
+              {periodSaving ? 'Menyimpan...' : 'Atur Periode'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AdminLayout>
   )
 }

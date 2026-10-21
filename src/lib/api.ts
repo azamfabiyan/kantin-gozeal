@@ -181,6 +181,13 @@ export const api = {
       body: JSON.stringify({ mode }),
     }),
 
+  setPeriod: (period: string) =>
+    request<{ period: string; message: string }>('/api/period/set', {
+      method: 'POST',
+      headers: { 'x-admin-token': getAdminToken() || '' },
+      body: JSON.stringify({ period }),
+    }),
+
   // Reports
   getReports: (filters: ReportFilters) => {
     const params = new URLSearchParams()
