@@ -8,8 +8,8 @@ import { DateOfBirthPicker } from './DateOfBirthPicker'
 import { EmployeeLayout } from './EmployeeLayout'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Loader2, User, Shield } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Loader2, User, Shield, Info, CheckCircle2 } from 'lucide-react'
 import { toast } from 'sonner'
 
 export function EmployeeLogin() {
@@ -33,7 +33,11 @@ export function EmployeeLogin() {
     try {
       const res = await api.employeeLogin(name, dateOfBirth)
       setEmployee(res.employee, res.token)
-      toast.success(`Selamat datang, ${res.employee.name}!`)
+      if (res.firstLoginSetup) {
+        toast.success(`Selamat datang, ${res.employee.name}! Tanggal lahir Anda telah disimpan.`)
+      } else {
+        toast.success(`Selamat datang, ${res.employee.name}!`)
+      }
       setRoute('karyawan/dashboard')
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Gagal login')
@@ -44,26 +48,25 @@ export function EmployeeLogin() {
 
   return (
     <EmployeeLayout title="Login Karyawan">
-      <div className="flex flex-col items-center justify-center min-h-[70vh] py-6">
-        <div className="w-full max-w-md space-y-6">
+      <div className="flex flex-col items-center justify-center min-h-[65vh] py-4">
+        <div className="w-full max-w-sm space-y-4">
+          {/* Logo + Title - compact */}
           <div className="text-center space-y-2">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-200 dark:bg-slate-700/40">
-              <User className="w-8 h-8 text-slate-700 dark:text-slate-300" />
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-slate-200 dark:bg-slate-700/40">
+              <User className="w-7 h-7 text-slate-700 dark:text-slate-300" />
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold">Login Karyawan</h1>
-            <p className="text-sm text-muted-foreground">
-              Masuk dengan nama lengkap dan tanggal lahir untuk mengambil jatah makanan &amp; minuman
+            <h1 className="text-lg sm:text-xl font-bold">Login Karyawan</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground px-2">
+              Masuk dengan nama lengkap dan tanggal lahir
             </p>
           </div>
 
+          {/* Login Card - compact */}
           <Card>
-            <CardHeader>
-              <CardTitle className="text-base sm:text-lg">Masuk ke Akun</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <label htmlFor="emp-name" className="text-sm font-medium">
+            <CardContent className="pt-4 p-4">
+              <form onSubmit={handleSubmit} className="space-y-3">
+                <div className="space-y-1.5">
+                  <label htmlFor="emp-name" className="text-xs sm:text-sm font-medium">
                     Nama Lengkap <span className="text-destructive">*</span>
                   </label>
                   <Input
@@ -73,17 +76,18 @@ export function EmployeeLogin() {
                     placeholder="Contoh: BAYU"
                     autoComplete="off"
                     disabled={loading}
+                    className="h-11"
                   />
                 </div>
                 <DateOfBirthPicker
                   value={dateOfBirth}
                   onChange={setDateOfBirth}
                   required
-                  description="Pilih tanggal, bulan, dan tahun lahir Anda"
+                  description="Pilih tanggal, bulan, dan tahun lahir"
                 />
                 <Button
                   type="submit"
-                  className="w-full bg-slate-800 hover:bg-slate-900"
+                  className="w-full h-11 brand-gradient text-white"
                   disabled={loading}
                 >
                   {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
@@ -93,13 +97,36 @@ export function EmployeeLogin() {
             </CardContent>
           </Card>
 
+          {/* Info box - login pertama */}
+          <div className="flex items-start gap-2 p-2.5 rounded-md bg-muted/50 text-xs text-muted-foreground">
+            <Info className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <p className="font-medium text-foreground">Informasi Login:</p>
+              <ul className="space-y-0.5">
+                <li className="flex items-start gap-1">
+                  <span className="text-muted-foreground">1.</span>
+                  <span>Login pertama: tanggal lahir Anda akan disimpan otomatis</span>
+                </li>
+                <li className="flex items-start gap-1">
+                  <span className="text-muted-foreground">2.</span>
+                  <span>Login berikutnya: gunakan tanggal lahir yang sama</span>
+                </li>
+                <li className="flex items-start gap-1">
+                  <span className="text-muted-foreground">3.</span>
+                  <span>Jika lupa tanggal lahir, hubungi admin</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Admin link - compact */}
           <div className="text-center">
             <button
               onClick={() => setRoute('admin/login')}
-              className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-md hover:bg-muted/50"
             >
               <Shield className="w-3.5 h-3.5" />
-              Admin
+              Login Admin
             </button>
           </div>
         </div>

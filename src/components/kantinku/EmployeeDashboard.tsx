@@ -104,27 +104,24 @@ export function EmployeeDashboard() {
 
   return (
     <EmployeeLayout>
-      <div className="space-y-4 sm:space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold">Halo, {employee.name}!</h1>
-            <p className="text-sm text-muted-foreground">
-              Periode aktif: <span className="font-medium">{data ? formatPeriod(data.activePeriod) : '...'}</span>
+      <div className="space-y-4 sm:space-y-5">
+        {/* Header - compact */}
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-lg sm:text-xl font-bold truncate">Halo, {employee.name}!</h1>
+            <p className="text-xs text-muted-foreground">
+              Periode: <span className="font-medium">{data ? formatPeriod(data.activePeriod) : '...'}</span>
             </p>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={fetchData} disabled={loading}>
-              <RefreshCw className={cn('w-4 h-4 mr-1.5', loading && 'animate-spin')} />
-              Refresh
+          <div className="flex gap-1 shrink-0">
+            <Button variant="outline" size="sm" className="icon-btn h-9 w-9 p-0" onClick={fetchData} disabled={loading} title="Refresh">
+              <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setRoute('karyawan/history')}>
-              <History className="w-4 h-4 mr-1.5" />
-              Riwayat
+            <Button variant="outline" size="sm" className="icon-btn h-9 w-9 p-0" onClick={() => setRoute('karyawan/history')} title="Riwayat">
+              <History className="w-4 h-4" />
             </Button>
-            <Button variant="outline" size="sm" onClick={handleSwitchEmployee}>
-              <LogOut className="w-4 h-4 mr-1.5" />
-              Ganti
+            <Button variant="outline" size="sm" className="icon-btn h-9 w-9 p-0" onClick={handleSwitchEmployee} title="Ganti Karyawan">
+              <LogOut className="w-4 h-4" />
             </Button>
           </div>
         </div>
