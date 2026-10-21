@@ -1,0 +1,271 @@
+{
+  "app": "Kantin Gozeal",
+  "export_date": "2026-10-22",
+  "period": {
+    "period": {
+      "currentPeriod": "2026-10",
+      "startedAt": "2026-10-21T19:19:57.179Z",
+      "resetBy": "gozealkantin"
+    }
+  },
+  "employees": [
+    {
+      "name": "SUHERYEDI",
+      "code": "EMP001",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "ANGGARA",
+      "code": "EMP002",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "ALDI NUR",
+      "code": "EMP003",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "DZAKY",
+      "code": "EMP004",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "FATHAN",
+      "code": "EMP005",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "NAJIB",
+      "code": "EMP006",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "ROMI",
+      "code": "EMP007",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "DAYAT",
+      "code": "EMP008",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "VINCI",
+      "code": "EMP009",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "IJUL",
+      "code": "EMP010",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "DIKI",
+      "code": "EMP011",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "GIDHAM",
+      "code": "EMP012",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "BIYAN",
+      "code": "EMP013",
+      "dateOfBirth": "2005-04-01",
+      "active": true
+    },
+    {
+      "name": "HILAL",
+      "code": "EMP014",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "DIMAS",
+      "code": "EMP015",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "ROPIYANDI",
+      "code": "EMP016",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "RIDWAN",
+      "code": "EMP017",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "ADIS",
+      "code": "EMP018",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "WAWAN",
+      "code": "EMP019",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "ARYA",
+      "code": "EMP020",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "ANGGA",
+      "code": "EMP021",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "ILHAM",
+      "code": "EMP022",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "ALIF",
+      "code": "EMP023",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "REYHAN",
+      "code": "EMP024",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "ALDI KIPOY",
+      "code": "EMP025",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "FERDI",
+      "code": "EMP026",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "TORIQ",
+      "code": "EMP027",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "TIA",
+      "code": "EMP028",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "HADI",
+      "code": "EMP029",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "OJI",
+      "code": "EMP030",
+      "dateOfBirth": null,
+      "active": true
+    },
+    {
+      "name": "RYAN",
+      "code": "EMP031",
+      "dateOfBirth": null,
+      "active": true
+    }
+  ],
+  "variants": [
+    {
+      "name": "HYDROCOCO",
+      "type": "DRINK",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true
+    },
+    {
+      "name": "MIZONE",
+      "type": "DRINK",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true
+    },
+    {
+      "name": "NESCAFE",
+      "type": "DRINK",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true
+    },
+    {
+      "name": "POCARI",
+      "type": "DRINK",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true
+    },
+    {
+      "name": "AOKA",
+      "type": "FOOD",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true
+    },
+    {
+      "name": "CHITATO",
+      "type": "FOOD",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true
+    },
+    {
+      "name": "MIE ENAK",
+      "type": "FOOD",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true
+    },
+    {
+      "name": "POP MIE",
+      "type": "FOOD",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true
+    },
+    {
+      "name": "TARO",
+      "type": "FOOD",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true
+    },
+    {
+      "name": "WAFLE",
+      "type": "FOOD",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true
+    }
+  ]
+}
