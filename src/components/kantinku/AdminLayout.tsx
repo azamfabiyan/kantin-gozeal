@@ -2,7 +2,10 @@
 
 import Image from 'next/image'
 import { useRouter } from '@/stores/router'
+import { api } from '@/lib/api'
 import type { ReactNode } from 'react'
+import { Home, LogOut } from 'lucide-react'
+import { toast } from 'sonner'
 
 interface AdminLayoutProps {
   children: ReactNode
@@ -21,6 +24,18 @@ export function AdminLayout({ children, title, activeTab }: AdminLayoutProps) {
   const setRoute = useRouter((s) => s.setRoute)
   const year = new Date().getFullYear()
 
+  const handleLogout = async () => {
+    try {
+      await api.logout()
+      toast.success('Anda telah keluar dari admin')
+    } catch {}
+    setRoute('karyawan/login')
+  }
+
+  const goHome = () => {
+    setRoute('karyawan/login')
+  }
+
   return (
     <div className="app-shell min-h-screen bg-slate-50 dark:bg-slate-950">
       <header className="brand-gradient text-white shadow-md safe-area-top sticky top-0 z-30">
@@ -31,6 +46,27 @@ export function AdminLayout({ children, title, activeTab }: AdminLayoutProps) {
                 <Image src="/gozeal-logo.png" alt="Kantin Gozeal" width={80} height={18} priority />
               </div>
               <span className="text-sm sm:text-base font-semibold hidden sm:inline">{title}</span>
+            </div>
+            {/* Action buttons - Beranda & Keluar */}
+            <div className="flex items-center gap-1 sm:gap-2">
+              <button
+                onClick={goHome}
+                className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md bg-white/15 hover:bg-white/25 transition-colors"
+                title="Kembali ke halaman utama"
+                aria-label="Beranda"
+              >
+                <Home className="w-4 h-4" />
+                <span className="hidden sm:inline">Beranda</span>
+              </button>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md bg-white/15 hover:bg-white/25 transition-colors"
+                title="Keluar dari admin"
+                aria-label="Keluar"
+              >
+                <LogOut className="w-4 h-4" />
+                <span className="hidden sm:inline">Keluar</span>
+              </button>
             </div>
           </div>
           {/* Tabs - horizontal scroll on mobile */}

@@ -140,7 +140,7 @@ export function EmployeeDashboard() {
             <Card>
               <CardContent className="p-3 sm:p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <Utensils className="w-5 h-5 text-amber-600" />
+                  <Utensils className="w-5 h-5 text-slate-600" />
                   <span className="text-xs sm:text-sm font-medium text-muted-foreground">Makanan</span>
                 </div>
                 <div className="text-2xl sm:text-3xl font-bold">
@@ -152,7 +152,7 @@ export function EmployeeDashboard() {
             <Card>
               <CardContent className="p-3 sm:p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <CupSoda className="w-5 h-5 text-cyan-600" />
+                  <CupSoda className="w-5 h-5 text-slate-500" />
                   <span className="text-xs sm:text-sm font-medium text-muted-foreground">Minuman</span>
                 </div>
                 <div className="text-2xl sm:text-3xl font-bold">
@@ -167,7 +167,7 @@ export function EmployeeDashboard() {
         {/* Food section */}
         <section className="space-y-3">
           <div className="flex items-center gap-2">
-            <Utensils className="w-5 h-5 text-amber-600" />
+            <Utensils className="w-5 h-5 text-slate-600" />
             <h2 className="text-lg sm:text-xl font-semibold">Pilih Makanan</h2>
           </div>
           {loading && !data ? (
@@ -186,7 +186,7 @@ export function EmployeeDashboard() {
         {/* Drink section */}
         <section className="space-y-3">
           <div className="flex items-center gap-2">
-            <CupSoda className="w-5 h-5 text-cyan-600" />
+            <CupSoda className="w-5 h-5 text-slate-500" />
             <h2 className="text-lg sm:text-xl font-semibold">Pilih Minuman</h2>
           </div>
           {loading && !data ? (
@@ -217,9 +217,9 @@ export function EmployeeDashboard() {
                     <li key={p.id} className="flex items-center justify-between gap-2 py-2 border-b last:border-0">
                       <div className="flex items-center gap-2 min-w-0">
                         {p.type === 'FOOD' ? (
-                          <Utensils className="w-4 h-4 text-amber-600 shrink-0" />
+                          <Utensils className="w-4 h-4 text-slate-600 shrink-0" />
                         ) : (
-                          <CupSoda className="w-4 h-4 text-cyan-600 shrink-0" />
+                          <CupSoda className="w-4 h-4 text-slate-500 shrink-0" />
                         )}
                         <span className="text-sm font-medium truncate">{p.variant?.name}</span>
                       </div>
@@ -243,7 +243,7 @@ export function EmployeeDashboard() {
             <AlertDialogDescription>
               Apakah Anda yakin ingin mengambil: <strong className="text-foreground">{pickupTarget?.name}</strong>?
               <br /><br />
-              <span className="text-amber-600 dark:text-amber-500">
+              <span className="text-slate-600 dark:text-slate-400">
                 ⚠️ Setelah diambil, Anda tidak bisa mengganti atau membatalkan pilihan ini di periode {pickupTarget && formatPeriod(data?.activePeriod || '')}.
               </span>
             </AlertDialogDescription>
@@ -253,7 +253,7 @@ export function EmployeeDashboard() {
             <AlertDialogAction
               onClick={handleConfirmPickup}
               disabled={pickupLoading}
-              className="bg-emerald-600 hover:bg-emerald-700"
+              className="bg-slate-800 hover:bg-slate-900"
             >
               {pickupLoading ? 'Memproses...' : 'Ya, Ambil'}
             </AlertDialogAction>
@@ -282,12 +282,12 @@ function VariantCard({
         </div>
         <div className="flex items-center justify-between text-xs sm:text-sm">
           <span className="text-muted-foreground">
-            Stok: <span className={cn('font-medium', variant.stock <= 5 ? 'text-amber-600' : 'text-foreground')}>
+            Stok: <span className={cn('font-medium', variant.stock <= 5 ? 'text-slate-600' : 'text-foreground')}>
               {variant.stock}
             </span>
           </span>
           {variant.status === 'taken' ? (
-            <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+            <Badge className="bg-slate-200 text-slate-700 dark:bg-slate-700/40 dark:text-slate-300">
               <CheckCircle2 className="w-3 h-3 mr-1" />
               Sudah Diambil
             </Badge>
@@ -304,7 +304,7 @@ function VariantCard({
           size="sm"
           className={cn(
             'mt-auto w-full',
-            isFood ? 'bg-amber-600 hover:bg-amber-700' : 'bg-cyan-600 hover:bg-cyan-700',
+            isFood ? 'bg-slate-700 hover:bg-slate-800' : 'bg-slate-600 hover:bg-slate-700',
           )}
           disabled={variant.status !== 'available'}
           onClick={() => onPickup(variant)}

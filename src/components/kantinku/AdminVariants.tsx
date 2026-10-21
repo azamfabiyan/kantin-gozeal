@@ -194,7 +194,7 @@ export function AdminVariants() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 sm:gap-4">
           <VariantColumn
             title="Makanan"
-            icon={<Utensils className="w-5 h-5 text-amber-600" />}
+            icon={<Utensils className="w-5 h-5 text-slate-600" />}
             accent="amber"
             variants={foods}
             loading={loading}
@@ -206,7 +206,7 @@ export function AdminVariants() {
           />
           <VariantColumn
             title="Minuman"
-            icon={<CupSoda className="w-5 h-5 text-cyan-600" />}
+            icon={<CupSoda className="w-5 h-5 text-slate-500" />}
             accent="cyan"
             variants={drinks}
             loading={loading}
@@ -349,15 +349,15 @@ export function AdminVariants() {
                       <div className="flex items-center gap-2 flex-wrap">
                         <Badge className={cn(
                           'text-[10px]',
-                          h.changeType === 'ADD' && 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
-                          h.changeType === 'REDUCE' && 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-                          h.changeType === 'SET' && 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
+                          h.changeType === 'ADD' && 'bg-slate-200 text-slate-700 dark:bg-slate-700/40 dark:text-slate-300',
+                          h.changeType === 'REDUCE' && 'bg-slate-200 text-slate-700 dark:bg-slate-700/40 dark:text-slate-300',
+                          h.changeType === 'SET' && 'bg-slate-200 text-slate-700 dark:bg-slate-700/40 dark:text-slate-300',
                           h.changeType === 'PICKUP_DECREMENT' && 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
                         )}>
                           {h.changeType}
                         </Badge>
                         <span className="font-medium">{h.oldStock} → {h.newStock}</span>
-                        <span className={cn('text-xs', h.amount > 0 ? 'text-emerald-600' : 'text-red-600')}>
+                        <span className={cn('text-xs', h.amount > 0 ? 'text-slate-600' : 'text-slate-700')}>
                           ({h.amount > 0 ? '+' : ''}{h.amount})
                         </span>
                       </div>
@@ -443,13 +443,13 @@ function VariantColumn({
                   </div>
                   <div className="flex flex-wrap gap-1 justify-end">
                     {isOut && <Badge variant="destructive" className="text-[10px]">Habis</Badge>}
-                    {isLow && <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 text-[10px]">Menipis</Badge>}
+                    {isLow && <Badge className="bg-slate-200 text-slate-700 dark:bg-slate-700/40 dark:text-slate-300 text-[10px]">Menipis</Badge>}
                     {!v.active && <Badge variant="secondary" className="text-[10px]">Nonaktif</Badge>}
                   </div>
                 </div>
                 <div className={cn('h-1.5 rounded-full bg-muted overflow-hidden')}>
                   <div
-                    className={cn('h-full', accent === 'amber' ? 'bg-amber-500' : 'bg-cyan-500')}
+                    className={cn('h-full', accent === 'amber' ? 'bg-slate-500' : 'bg-slate-400')}
                     style={{ width: `${pct}%` }}
                   />
                 </div>

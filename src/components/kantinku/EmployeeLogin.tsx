@@ -47,8 +47,8 @@ export function EmployeeLogin() {
       <div className="flex flex-col items-center justify-center min-h-[70vh] py-6">
         <div className="w-full max-w-md space-y-6">
           <div className="text-center space-y-2">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-900/40">
-              <User className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-200 dark:bg-slate-700/40">
+              <User className="w-8 h-8 text-slate-700 dark:text-slate-300" />
             </div>
             <h1 className="text-xl sm:text-2xl font-bold">Login Karyawan</h1>
             <p className="text-sm text-muted-foreground">
@@ -83,7 +83,7 @@ export function EmployeeLogin() {
                 />
                 <Button
                   type="submit"
-                  className="w-full bg-emerald-600 hover:bg-emerald-700"
+                  className="w-full bg-slate-800 hover:bg-slate-900"
                   disabled={loading}
                 >
                   {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}

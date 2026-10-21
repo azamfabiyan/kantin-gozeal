@@ -246,9 +246,9 @@ export function AdminReports() {
                         <td className="p-3 font-medium">{p.variant?.name}</td>
                         <td className="p-3 text-center">
                           {p.type === 'FOOD' ? (
-                            <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 text-[10px]">Makanan</Badge>
+                            <Badge className="bg-slate-200 text-slate-700 dark:bg-slate-700/40 dark:text-slate-300 text-[10px]">Makanan</Badge>
                           ) : (
-                            <Badge className="bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300 text-[10px]">Minuman</Badge>
+                            <Badge className="bg-slate-300 text-slate-700 dark:bg-slate-600/40 dark:text-slate-300 text-[10px]">Minuman</Badge>
                           )}
                         </td>
                         <td className="p-3 hidden md:table-cell text-xs text-muted-foreground">{formatPeriod(p.period)}</td>
@@ -267,10 +267,10 @@ export function AdminReports() {
 
 function SummaryCard({ icon, label, value, color }: { icon: React.ReactNode; label: string; value: number; color: 'blue' | 'emerald' | 'amber' | 'cyan' }) {
   const colorMap = {
-    blue: 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300',
-    emerald: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-300',
-    amber: 'bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-300',
-    cyan: 'bg-cyan-100 text-cyan-600 dark:bg-cyan-900/40 dark:text-cyan-300',
+    blue: 'bg-slate-200 text-slate-700 dark:bg-slate-700/40 dark:text-slate-300',
+    emerald: 'bg-slate-200 text-slate-700 dark:bg-slate-700/40 dark:text-slate-300',
+    amber: 'bg-slate-200 text-slate-700 dark:bg-slate-700/40 dark:text-slate-300',
+    cyan: 'bg-slate-300 text-slate-700 dark:bg-slate-600/40 dark:text-slate-300',
   }
   return (
     <Card>

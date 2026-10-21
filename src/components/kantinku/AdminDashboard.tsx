@@ -179,8 +179,8 @@ export function AdminDashboard() {
         {/* Stock cards */}
         {stats && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 sm:gap-4">
-            <StockCard title="Stok Makanan" icon={<Utensils className="w-5 h-5 text-amber-600" />} variants={stats.foodStock} accent="amber" />
-            <StockCard title="Stok Minuman" icon={<CupSoda className="w-5 h-5 text-cyan-600" />} variants={stats.drinkStock} accent="cyan" />
+            <StockCard title="Stok Makanan" icon={<Utensils className="w-5 h-5 text-slate-600" />} variants={stats.foodStock} accent="amber" />
+            <StockCard title="Stok Minuman" icon={<CupSoda className="w-5 h-5 text-slate-500" />} variants={stats.drinkStock} accent="cyan" />
           </div>
         )}
 
@@ -202,9 +202,9 @@ export function AdminDashboard() {
                     <li key={p.id} className="flex items-center justify-between gap-2 py-2 border-b last:border-0">
                       <div className="flex items-center gap-2 min-w-0">
                         {p.type === 'FOOD' ? (
-                          <Utensils className="w-4 h-4 text-amber-600 shrink-0" />
+                          <Utensils className="w-4 h-4 text-slate-600 shrink-0" />
                         ) : (
-                          <CupSoda className="w-4 h-4 text-cyan-600 shrink-0" />
+                          <CupSoda className="w-4 h-4 text-slate-500 shrink-0" />
                         )}
                         <div className="min-w-0">
                           <div className="text-sm font-medium truncate">
@@ -232,7 +232,7 @@ export function AdminDashboard() {
               <div className="space-y-3">
                 <p>Pilih mode reset periode:</p>
                 <div className="space-y-2">
-                  <label className={cn('flex items-start gap-2 p-3 border rounded-md cursor-pointer', resetMode === 'current' && 'border-blue-500 bg-blue-50 dark:bg-blue-950/30')}>
+                  <label className={cn('flex items-start gap-2 p-3 border rounded-md cursor-pointer', resetMode === 'current' && 'border-slate-700 bg-slate-100 dark:bg-slate-800/30')}>
                     <input
                       type="radio"
                       name="resetMode"
@@ -245,7 +245,7 @@ export function AdminDashboard() {
                       <div className="text-xs text-muted-foreground">Hapus semua pengambilan periode ini & reset stok ke awal</div>
                     </div>
                   </label>
-                  <label className={cn('flex items-start gap-2 p-3 border rounded-md cursor-pointer', resetMode === 'next' && 'border-blue-500 bg-blue-50 dark:bg-blue-950/30')}>
+                  <label className={cn('flex items-start gap-2 p-3 border rounded-md cursor-pointer', resetMode === 'next' && 'border-slate-700 bg-slate-100 dark:bg-slate-800/30')}>
                     <input
                       type="radio"
                       name="resetMode"
@@ -280,10 +280,10 @@ export function AdminDashboard() {
 
 function StatCard({ icon, label, value, color }: { icon: React.ReactNode; label: string; value: number; color: 'blue' | 'emerald' | 'amber' | 'red' }) {
   const colorMap = {
-    blue: 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300',
-    emerald: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-300',
-    amber: 'bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-300',
-    red: 'bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-300',
+    blue: 'bg-slate-200 text-slate-700 dark:bg-slate-700/40 dark:text-slate-300',
+    emerald: 'bg-slate-200 text-slate-700 dark:bg-slate-700/40 dark:text-slate-300',
+    amber: 'bg-slate-200 text-slate-700 dark:bg-slate-700/40 dark:text-slate-300',
+    red: 'bg-red-100 text-slate-700 dark:bg-red-900/40 dark:text-red-300',
   }
   return (
     <Card>
@@ -324,7 +324,7 @@ function StockCard({ title, icon, variants, accent }: { title: string; icon: Rea
                     {!v.active && <Badge variant="secondary" className="ml-1 text-[10px]">Nonaktif</Badge>}
                   </span>
                 </div>
-                <Progress value={pct} className={cn('h-1.5', accent === 'amber' ? '[&>div]:bg-amber-500' : '[&>div]:bg-cyan-500')} />
+                <Progress value={pct} className={cn('h-1.5', accent === 'amber' ? '[&>div]:bg-slate-600' : '[&>div]:bg-slate-400')} />
               </div>
             )
           })

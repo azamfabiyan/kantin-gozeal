@@ -37,7 +37,7 @@ export function AdminLogin() {
   }
 
   return (
-    <div className="app-shell min-h-screen bg-gradient-to-b from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30">
+    <div className="app-shell min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-900/30 dark:to-slate-800/30">
       <header className="brand-gradient text-white shadow-md safe-area-top">
         <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center gap-2 sm:gap-3">
           <div className="bg-white rounded-md p-1 flex items-center">
@@ -49,8 +49,8 @@ export function AdminLogin() {
       <main className="flex-1 w-full max-w-md mx-auto px-3 sm:px-4 py-6 sm:py-10">
         <div className="space-y-6">
           <div className="text-center space-y-2">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/40">
-              <Lock className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-200 dark:bg-slate-700/40">
+              <Lock className="w-8 h-8 text-slate-700 dark:text-slate-300" />
             </div>
             <h1 className="text-xl sm:text-2xl font-bold">Login Administrator</h1>
             <p className="text-sm text-muted-foreground">

@@ -149,9 +149,9 @@ export function EmployeeHistory() {
                         <li key={p.id} className="flex items-center justify-between gap-2 py-2 border-b last:border-0">
                           <div className="flex items-center gap-2 min-w-0">
                             {p.type === 'FOOD' ? (
-                              <Utensils className="w-4 h-4 text-amber-600 shrink-0" />
+                              <Utensils className="w-4 h-4 text-slate-600 shrink-0" />
                             ) : (
-                              <CupSoda className="w-4 h-4 text-cyan-600 shrink-0" />
+                              <CupSoda className="w-4 h-4 text-slate-500 shrink-0" />
                             )}
                             <span className="text-sm font-medium truncate">{p.variant?.name}</span>
                           </div>

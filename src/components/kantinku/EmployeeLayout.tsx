@@ -15,7 +15,7 @@ export function EmployeeLayout({ children, title, showBackToLogin }: EmployeeLay
   const year = new Date().getFullYear()
 
   return (
-    <div className="app-shell min-h-screen bg-gradient-to-b from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30">
+    <div className="app-shell min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-900/30 dark:to-slate-800/30">
       <header className="brand-gradient-employee text-white shadow-md safe-area-top">
         <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between">
           <div className="flex items-center gap-2 sm:gap-3">

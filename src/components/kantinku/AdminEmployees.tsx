@@ -154,7 +154,7 @@ export function AdminEmployees() {
         </div>
 
         {/* Info box */}
-        <div className="flex items-start gap-2 p-3 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-800 dark:text-blue-200 text-xs sm:text-sm">
+        <div className="flex items-start gap-2 p-3 rounded-md bg-slate-100 dark:bg-slate-800/30 text-slate-800 dark:text-slate-200 text-xs sm:text-sm">
           <Info className="w-4 h-4 shrink-0 mt-0.5" />
           <p>
             Setiap karyawan bisa ambil 1x per variant per periode. Dengan 6 makanan + 4 minuman, maksimal 10 pengambilan per periode.
@@ -216,7 +216,7 @@ export function AdminEmployees() {
                         </td>
                         <td className="p-3 text-center">
                           {e.active ? (
-                            <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">Aktif</Badge>
+                            <Badge className="bg-slate-200 text-slate-700 dark:bg-slate-700/40 dark:text-slate-300">Aktif</Badge>
                           ) : (
                             <Badge variant="secondary">Nonaktif</Badge>
                           )}
