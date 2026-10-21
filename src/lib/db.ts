@@ -1,8 +1,9 @@
 import { PrismaClient } from '@prisma/client'
 
-// If Turso DATABASE_AUTH_TOKEN is set, use Turso (cloud SQLite)
-// Otherwise, use local SQLite file
-const useTurso = !!process.env.DATABASE_AUTH_TOKEN
+// Detect if we should use Turso (cloud) or local SQLite
+// Use Turso if DATABASE_URL starts with "libsql://"
+const dbUrl = process.env.DATABASE_URL || ''
+const useTurso = dbUrl.startsWith('libsql://')
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
@@ -14,7 +15,7 @@ function createPrismaClient(): PrismaClient {
     const { PrismaLibSQL } = require('@prisma/adapter-libsql')
     const { createClient } = require('@libsql/client')
     const libsql = createClient({
-      url: process.env.DATABASE_URL!,
+      url: dbUrl,
       authToken: process.env.DATABASE_AUTH_TOKEN,
     })
     const adapter = new PrismaLibSQL(libsql)
