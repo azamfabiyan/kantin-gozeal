@@ -1,0 +1,456 @@
+{
+  "backup_date": "2026-10-22",
+  "app": "Kantin Gozeal",
+  "period": {
+    "period": {
+      "currentPeriod": "2026-10",
+      "startedAt": "2026-10-21T19:19:57.179Z",
+      "resetBy": "gozealkantin"
+    }
+  },
+  "employees": [
+    {
+      "id": "cmviefk640000m70ccecjztt0",
+      "code": "EMP001",
+      "name": "SUHERYEDI",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.301Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk650001m70cxutp7jbn",
+      "code": "EMP002",
+      "name": "ANGGARA",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.302Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk660002m70c6w29a3tn",
+      "code": "EMP003",
+      "name": "ALDI NUR",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.303Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk670003m70cd9g8wbpz",
+      "code": "EMP004",
+      "name": "DZAKY",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.304Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk680004m70cccw4kzzw",
+      "code": "EMP005",
+      "name": "FATHAN",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.304Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk690005m70c5rhyiwqw",
+      "code": "EMP006",
+      "name": "NAJIB",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.305Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6a0006m70c7s0pxnrh",
+      "code": "EMP007",
+      "name": "ROMI",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.306Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6b0007m70cblq78v1m",
+      "code": "EMP008",
+      "name": "DAYAT",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.307Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6b0008m70cgqriw578",
+      "code": "EMP009",
+      "name": "VINCI",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.308Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6c0009m70csj6xl55l",
+      "code": "EMP010",
+      "name": "IJUL",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.308Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6d000am70c3oic90dg",
+      "code": "EMP011",
+      "name": "DIKI",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.309Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6e000bm70clori7s14",
+      "code": "EMP012",
+      "name": "GIDHAM",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.310Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6f000cm70c8dqp8u8v",
+      "code": "EMP013",
+      "name": "BIYAN",
+      "dateOfBirth": "2005-04-01",
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.311Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6i000dm70cmz8cuz9h",
+      "code": "EMP014",
+      "name": "HILAL",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.314Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6j000em70csd3l1hgi",
+      "code": "EMP015",
+      "name": "DIMAS",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.315Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6k000fm70catj7o5ao",
+      "code": "EMP016",
+      "name": "ROPIYANDI",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.316Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6l000gm70cgwrfowc4",
+      "code": "EMP017",
+      "name": "RIDWAN",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.317Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6m000hm70ctvihy4iw",
+      "code": "EMP018",
+      "name": "ADIS",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.318Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6n000im70ctz2b8rtw",
+      "code": "EMP019",
+      "name": "WAWAN",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.319Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6o000jm70c27fkn0li",
+      "code": "EMP020",
+      "name": "ARYA",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.320Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6p000km70cz9oceynw",
+      "code": "EMP021",
+      "name": "ANGGA",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.321Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6s000lm70c2bs3nh2f",
+      "code": "EMP022",
+      "name": "ILHAM",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.324Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6t000mm70c8062x3r1",
+      "code": "EMP023",
+      "name": "ALIF",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.325Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6t000nm70c4wij2ku6",
+      "code": "EMP024",
+      "name": "REYHAN",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.326Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6u000om70cnudm48cl",
+      "code": "EMP025",
+      "name": "ALDI KIPOY",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.327Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6v000pm70clq0babrh",
+      "code": "EMP026",
+      "name": "FERDI",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.327Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6w000qm70c45azj7ol",
+      "code": "EMP027",
+      "name": "TORIQ",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.328Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmviefk6w000rm70c93wmy9dz",
+      "code": "EMP028",
+      "name": "TIA",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.329Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmvifjqd8002cm70cetulh7it",
+      "code": "EMP029",
+      "name": "HADI",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T18:12:48.573Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmvifjssk002dm70ca3lur04f",
+      "code": "EMP030",
+      "name": "OJI",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T18:12:51.716Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    },
+    {
+      "id": "cmvifm0hs002em70c092op5pi",
+      "code": "EMP031",
+      "name": "RYAN",
+      "dateOfBirth": null,
+      "active": true,
+      "createdAt": "2026-10-21T18:14:35.008Z",
+      "foodPickups": 0,
+      "drinkPickups": 0,
+      "totalPickups": 0
+    }
+  ],
+  "variants": [
+    {
+      "id": "cmviefk79001am70cwvp57ahj",
+      "name": "HYDROCOCO",
+      "type": "DRINK",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.341Z",
+      "takenCount": 0
+    },
+    {
+      "id": "cmviefk7b001dm70cy326gfzl",
+      "name": "MIZONE",
+      "type": "DRINK",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.343Z",
+      "takenCount": 0
+    },
+    {
+      "id": "cmviefk7c001gm70c2luh2b9n",
+      "name": "NESCAFE",
+      "type": "DRINK",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.345Z",
+      "takenCount": 0
+    },
+    {
+      "id": "cmviefk7e001jm70ca31hts1v",
+      "name": "POCARI",
+      "type": "DRINK",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.346Z",
+      "takenCount": 0
+    },
+    {
+      "id": "cmviefk6y000sm70cwux8ec3j",
+      "name": "AOKA",
+      "type": "FOOD",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.330Z",
+      "takenCount": 0
+    },
+    {
+      "id": "cmviefk70000vm70cs1szti5i",
+      "name": "CHITATO",
+      "type": "FOOD",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.332Z",
+      "takenCount": 0
+    },
+    {
+      "id": "cmviefk72000ym70cq2fudc6c",
+      "name": "MIE ENAK",
+      "type": "FOOD",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.334Z",
+      "takenCount": 0
+    },
+    {
+      "id": "cmviefk730011m70crv6gr28z",
+      "name": "POP MIE",
+      "type": "FOOD",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.336Z",
+      "takenCount": 0
+    },
+    {
+      "id": "cmviefk750014m70cq42wfqc9",
+      "name": "TARO",
+      "type": "FOOD",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.338Z",
+      "takenCount": 0
+    },
+    {
+      "id": "cmviefk770017m70cg9oaobdl",
+      "name": "WAFLE",
+      "type": "FOOD",
+      "stock": 31,
+      "initialStock": 31,
+      "active": true,
+      "createdAt": "2026-10-21T17:41:34.339Z",
+      "takenCount": 0
+    }
+  ]
+}
