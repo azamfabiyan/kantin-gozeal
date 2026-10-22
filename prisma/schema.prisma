@@ -2,8 +2,7 @@
 // v7: Carry-over balance system (saldo menumpuk ke periode berikutnya)
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
