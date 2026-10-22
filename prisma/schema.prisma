@@ -9,6 +9,10 @@ generator client {
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
+  // When using Turso adapter, url is not used for actual connection
+  // The adapter (PrismaLibSql) handles the real connection
+  // For local dev: file:/path/to/db
+  // For Vercel: libsql://... (adapter overrides)
 }
 
 model Admin {
@@ -56,7 +60,6 @@ model Pickup {
   employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
   variant    Variant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
 
-  // NOTE: unique constraint REMOVED - now using EmployeeBalance for carry-over
   @@index([employeeId, period])
   @@index([period])
   @@index([variantId, period])
@@ -66,7 +69,7 @@ model EmployeeBalance {
   id         String   @id @default(cuid())
   employeeId String
   variantId  String
-  balance    Int      @default(0) // Saldo tersisa (carry-over, menumpuk)
+  balance    Int      @default(0)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
