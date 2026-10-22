@@ -6,6 +6,7 @@
 // 2. turso db tokens create kantin-gozeal
 // 3. Set DATABASE_URL and DATABASE_AUTH_TOKEN in .env
 
+import fs from 'fs'
 import { db } from '../src/lib/db'
 
 async function main() {
@@ -32,7 +33,6 @@ async function main() {
   console.log(`  - ${admins.length} admins`)
   
   // Export to JSON for manual import if needed
-  const fs = require('fs')
   const exportData = {
     employees, variants, pickups, balances, periodSettings, stockHistory, admins
   }
