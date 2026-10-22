@@ -81,6 +81,7 @@ export async function POST(req: NextRequest) {
 
     if (isTurso && turso) {
       const id = genId()
+      // 1. Insert variant + stock history
       await turso.batch([
         {
           sql: 'INSERT INTO Variant (id, name, type, stock, initialStock, active, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
@@ -91,6 +92,15 @@ export async function POST(req: NextRequest) {
           args: [genId(), id, 'SET', stockNum, 0, stockNum, 'Inisialisasi variant', admin.username, nowIso],
         },
       ])
+      // 2. Auto-create EmployeeBalance (saldo=1) untuk semua karyawan aktif
+      const employees = await turso.execute('SELECT id FROM Employee WHERE active = 1')
+      const balanceStmts = employees.rows.map((emp) => ({
+        sql: 'INSERT OR IGNORE INTO EmployeeBalance (id, employeeId, variantId, balance, createdAt, updatedAt) VALUES (?, ?, ?, 1, ?, ?)',
+        args: [genId(), String(emp.id), id, nowIso, nowIso],
+      }))
+      if (balanceStmts.length > 0) {
+        await turso.batch(balanceStmts)
+      }
       await broadcastEvent('variant:updated', { id, action: 'create' })
       return Response.json({
         variant: {
@@ -118,6 +128,16 @@ export async function POST(req: NextRequest) {
         note: 'Inisialisasi variant',
         changedBy: admin.username,
       },
+    })
+    // Auto-create EmployeeBalance (saldo=1) untuk semua karyawan aktif
+    const activeEmployees = await (db as PrismaClient).employee.findMany({ where: { active: true } })
+    await (db as PrismaClient).employeeBalance.createMany({
+      data: activeEmployees.map((emp) => ({
+        employeeId: emp.id,
+        variantId: variant.id,
+        balance: 1,
+      })),
+      skipDuplicates: true,
     })
     await broadcastEvent('variant:updated', { id: variant.id, action: 'create' })
     return Response.json({
