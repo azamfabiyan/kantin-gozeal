@@ -45,26 +45,46 @@ export function verifyAdminToken(token: string): { adminId: string } | null {
 }
 
 export async function ensureAdminExists(): Promise<void> {
-  const existing = await db.admin.findFirst()
-  if (existing) return
-  const passwordHash = await bcrypt.hash(ADMIN_PASSWORD, 10)
-  await db.admin.create({
-    data: {
-      username: ADMIN_USERNAME,
-      passwordHash,
-      name: ADMIN_NAME,
-    },
-  })
+  try {
+    const existing = await db.admin.findFirst()
+    if (existing) return
+    const passwordHash = await bcrypt.hash(ADMIN_PASSWORD, 10)
+    await db.admin.create({
+      data: {
+        username: ADMIN_USERNAME,
+        passwordHash,
+        name: ADMIN_NAME,
+      },
+    })
+  } catch (e) {
+    // If DB fails (e.g., Turso connection issue), skip - hardcoded credentials will be used
+    console.error('[ensureAdminExists] DB error:', e instanceof Error ? e.message : String(e))
+  }
 }
 
 export async function authenticateAdmin(username: string, password: string): Promise<{ token: string; admin: { id: string; username: string; name: string } } | null> {
-  await ensureAdminExists()
-  const admin = await db.admin.findUnique({ where: { username } })
-  if (!admin) return null
-  const ok = await bcrypt.compare(password, admin.passwordHash)
-  if (!ok) return null
-  const token = createAdminToken(admin.id)
-  return { token, admin: { id: admin.id, username: admin.username, name: admin.name } }
+  // Try DB first
+  try {
+    await ensureAdminExists()
+    const admin = await db.admin.findUnique({ where: { username } })
+    if (admin) {
+      const ok = await bcrypt.compare(password, admin.passwordHash)
+      if (ok) {
+        const token = createAdminToken(admin.id)
+        return { token, admin: { id: admin.id, username: admin.username, name: admin.name } }
+      }
+    }
+  } catch (e) {
+    console.error('[authenticateAdmin] DB error, using hardcoded:', e instanceof Error ? e.message : String(e))
+  }
+  
+  // Fallback: hardcoded credentials (if DB fails or admin not found)
+  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    const token = createAdminToken('hardcoded-admin-id')
+    return { token, admin: { id: 'hardcoded-admin-id', username: ADMIN_USERNAME, name: ADMIN_NAME } }
+  }
+  
+  return null
 }
 
 export async function getAdminFromRequest(req: Request): Promise<{ id: string; username: string; name: string } | null> {
