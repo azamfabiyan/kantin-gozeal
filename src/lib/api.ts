@@ -139,6 +139,12 @@ export const api = {
       body: JSON.stringify({ amount, note }),
     }),
 
+  applyQuota: (id: string) =>
+    request<{ ok: boolean; message: string; variant: string; quota: number; employeesUpdated: number }>(`/api/variants/${id}/apply-quota`, {
+      method: 'POST',
+      headers: { 'x-admin-token': getAdminToken() || '' },
+    }),
+
   variantHistory: (id: string) =>
     request<{ history: StockHistoryInfo[] }>(`/api/variants/${id}/history`, {
       headers: { 'x-admin-token': getAdminToken() || '' },

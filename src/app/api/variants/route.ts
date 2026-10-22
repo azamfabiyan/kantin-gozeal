@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
 
   if (isTurso && turso) {
     const variantsR = await turso.execute(
-      'SELECT id, name, type, stock, initialStock, active, createdAt FROM Variant ORDER BY type ASC',
+      'SELECT id, name, type, stock, initialStock, defaultQuota, active, createdAt FROM Variant ORDER BY type ASC',
     )
     const pickupsR = await turso.execute({
       sql: 'SELECT variantId, COUNT(*) as cnt FROM Pickup WHERE period = ? GROUP BY variantId',
@@ -32,6 +32,7 @@ export async function GET(req: NextRequest) {
       initialStock: toInt(row.initialStock),
       active: toBool(row.active),
       createdAt: toISO(row.createdAt),
+      defaultQuota: toInt(row.defaultQuota),
       takenCount: pickupMap.get(String(row.id)) || 0,
     }))
     return Response.json({ variants, activePeriod })
@@ -53,6 +54,7 @@ export async function GET(req: NextRequest) {
       initialStock: v.initialStock,
       active: v.active,
       createdAt: v.createdAt.toISOString(),
+      defaultQuota: v.defaultQuota,
       takenCount: pickupMap.get(v.id) || 0,
     })),
     activePeriod,
@@ -72,6 +74,7 @@ export async function POST(req: NextRequest) {
       return Response.json({ error: 'Tipe harus FOOD atau DRINK' }, { status: 400 })
     }
     const stockNum = Number(stock) || 0
+    const defaultQuota = Math.max(1, Number(body.defaultQuota) || 1)
     if (stockNum < 0) {
       return Response.json({ error: 'Stok tidak boleh negatif' }, { status: 400 })
     }
@@ -84,8 +87,8 @@ export async function POST(req: NextRequest) {
       // 1. Insert variant + stock history
       await turso.batch([
         {
-          sql: 'INSERT INTO Variant (id, name, type, stock, initialStock, active, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-          args: [id, trimmedName, type, stockNum, stockNum, activeFlag ? 1 : 0, nowIso, nowIso],
+          sql: 'INSERT INTO Variant (id, name, type, stock, initialStock, defaultQuota, active, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+          args: [id, trimmedName, type, stockNum, stockNum, defaultQuota, activeFlag ? 1 : 0, nowIso, nowIso],
         },
         {
           sql: 'INSERT INTO StockHistory (id, variantId, changeType, amount, oldStock, newStock, note, changedBy, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
@@ -111,12 +114,13 @@ export async function POST(req: NextRequest) {
           initialStock: stockNum,
           active: activeFlag,
           createdAt: nowIso,
+          defaultQuota,
         },
       })
     }
 
     const variant = await (db as PrismaClient).variant.create({
-      data: { name: trimmedName, type, stock: stockNum, initialStock: stockNum, active: activeFlag },
+      data: { name: trimmedName, type, stock: stockNum, initialStock: stockNum, defaultQuota, active: activeFlag },
     })
     await (db as PrismaClient).stockHistory.create({
       data: {
@@ -149,6 +153,7 @@ export async function POST(req: NextRequest) {
         initialStock: variant.initialStock,
         active: variant.active,
         createdAt: variant.createdAt.toISOString(),
+        defaultQuota: variant.defaultQuota,
       },
     })
   } catch (e) {

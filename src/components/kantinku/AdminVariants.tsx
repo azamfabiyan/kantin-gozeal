@@ -29,7 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { Utensils, CupSoda, Plus, Pencil, Trash2, Package, History as HistoryIcon, Loader2 } from 'lucide-react'
+import { Utensils, CupSoda, Plus, Pencil, Trash2, Package, History as HistoryIcon, Loader2, Users } from 'lucide-react'
 import { toast } from 'sonner'
 import { useWebSocket } from '@/hooks/use-websocket'
 import { formatTimestamp } from '@/lib/auth-client'
@@ -53,6 +53,10 @@ export function AdminVariants() {
   const [stockDialogOpen, setStockDialogOpen] = useState(false)
   const [historyTarget, setHistoryTarget] = useState<VariantRow | null>(null)
   const [historyDialogOpen, setHistoryDialogOpen] = useState(false)
+  const [quotaTarget, setQuotaTarget] = useState<VariantRow | null>(null)
+  const [quotaDialogOpen, setQuotaDialogOpen] = useState(false)
+  const [quotaValue, setQuotaValue] = useState(1)
+  const [quotaSaving, setQuotaSaving] = useState(false)
   const [form, setForm] = useState<{ name: string; type: 'FOOD' | 'DRINK'; stock: number; active: boolean }>({ name: '', type: 'FOOD', stock: 0, active: true })
   const [stockAmount, setStockAmount] = useState<string>('')
   const [stockNote, setStockNote] = useState('')
@@ -172,6 +176,31 @@ export function AdminVariants() {
     }
   }
 
+  const openQuota = (v: VariantRow) => {
+    setQuotaTarget(v)
+    setQuotaValue(v.defaultQuota || 1)
+    setQuotaDialogOpen(true)
+  }
+
+  const handleApplyQuota = async () => {
+    if (!quotaTarget) return
+    setQuotaSaving(true)
+    try {
+      // First update the variant's defaultQuota
+      await api.updateVariant(quotaTarget.id, { defaultQuota: quotaValue } as never)
+      // Then apply quota to all employees
+      const res = await api.applyQuota(quotaTarget.id)
+      toast.success(res.message)
+      setQuotaDialogOpen(false)
+      setQuotaTarget(null)
+      await fetchVariants()
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Gagal menerapkan jatah')
+    } finally {
+      setQuotaSaving(false)
+    }
+  }
+
   if (!admin) {
     return (
       <AdminLayout title="Variant">
@@ -202,6 +231,7 @@ export function AdminVariants() {
             onEdit={openEdit}
             onDelete={setDeleteTarget}
             onStock={openStock}
+            onApplyQuota={openQuota}
             onHistory={openHistory}
           />
           <VariantColumn
@@ -214,6 +244,7 @@ export function AdminVariants() {
             onEdit={openEdit}
             onDelete={setDeleteTarget}
             onStock={openStock}
+            onApplyQuota={openQuota}
             onHistory={openHistory}
           />
         </div>
@@ -390,12 +421,53 @@ export function AdminVariants() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Quota Dialog */}
+      <Dialog open={quotaDialogOpen} onOpenChange={setQuotaDialogOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-base">
+              <Users className="w-4 h-4" /> Atur Jatah per Karyawan
+            </DialogTitle>
+            <DialogDescription className="text-xs">
+              Variant: <strong>{quotaTarget?.name}</strong> — Atur berapa kali setiap karyawan bisa mengambil variant ini per periode.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-2 space-y-3">
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">Jatah per Karyawan</label>
+              <Input
+                type="number"
+                min="1"
+                max="99"
+                value={quotaValue}
+                onChange={(e) => setQuotaValue(Math.max(1, parseInt(e.target.value) || 1))}
+                className="h-10"
+              />
+              <p className="text-xs text-muted-foreground">
+                Setiap karyawan akan bisa mengambil variant ini sebanyak {quotaValue}x per periode.
+              </p>
+            </div>
+            <div className="p-2.5 rounded-md bg-muted/50 text-xs text-muted-foreground">
+              <p>⚠️ Data pengambilan yang sudah ada TIDAK akan dihapus.</p>
+              <p>Saldo karyawan akan disesuaikan: jatah baru - sudah diambil = sisa saldo.</p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setQuotaDialogOpen(false)} disabled={quotaSaving}>Batal</Button>
+            <Button onClick={handleApplyQuota} disabled={quotaSaving} className="brand-gradient text-white">
+              {quotaSaving ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Users className="w-4 h-4 mr-1.5" />}
+              {quotaSaving ? 'Menyimpan...' : 'Terapkan ke Semua Karyawan'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AdminLayout>
   )
 }
 
 function VariantColumn({
-  title, icon, accent, variants, loading, onAdd, onEdit, onDelete, onStock, onHistory,
+  title, icon, accent, variants, loading, onAdd, onEdit, onDelete, onStock, onHistory, onApplyQuota,
 }: {
   title: string
   icon: React.ReactNode
@@ -407,6 +479,7 @@ function VariantColumn({
   onDelete: (v: VariantRow) => void
   onStock: (v: VariantRow) => void
   onHistory: (v: VariantRow) => void
+  onApplyQuota: (v: VariantRow) => void
 }) {
   return (
     <Card>
@@ -438,7 +511,7 @@ function VariantColumn({
                   <div className="min-w-0">
                     <div className="font-semibold text-sm truncate">{v.name}</div>
                     <div className="text-xs text-muted-foreground">
-                      Stok: {v.stock}/{v.initialStock} · Diambil {v.takenCount || 0}x
+                      Stok: {v.stock}/{v.initialStock} · Diambil {v.takenCount || 0}x · Jatah: {v.defaultQuota || 1}/orang
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-1 justify-end">
@@ -457,6 +530,10 @@ function VariantColumn({
                   <Button variant="outline" size="sm" className="text-xs h-8" onClick={() => onStock(v)}>
                     <Package className="w-3.5 h-3.5 mr-1" />
                     Stok
+                  </Button>
+                  <Button variant="outline" size="sm" className="text-xs h-8" onClick={() => onApplyQuota(v)}>
+                    <Users className="w-3.5 h-3.5 mr-1" />
+                    Jatah: {v.defaultQuota || 1}
                   </Button>
                   <Button variant="outline" size="sm" className="text-xs h-8" onClick={() => onHistory(v)}>
                     <HistoryIcon className="w-3.5 h-3.5 mr-1" />

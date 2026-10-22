@@ -41,6 +41,10 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         updates.push('active = ?')
         args.push(body.active ? 1 : 0)
       }
+      if (typeof body.defaultQuota === 'number' && body.defaultQuota >= 1) {
+        updates.push('defaultQuota = ?')
+        args.push(body.defaultQuota)
+      }
       let newStock = curStock
       if (typeof body.stock === 'number' && body.stock !== curStock) {
         newStock = Math.max(0, body.stock)
