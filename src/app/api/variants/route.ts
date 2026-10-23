@@ -66,7 +66,8 @@ export async function POST(req: NextRequest) {
   if (!admin) return Response.json({ error: 'Unauthorized' }, { status: 401 })
 
   try {
-    const { name, type, stock, active } = await req.json()
+    const body = await req.json()
+    const { name, type, stock, active } = body
     if (!name || typeof name !== 'string' || name.trim().length < 1) {
       return Response.json({ error: 'Nama variant wajib diisi' }, { status: 400 })
     }
