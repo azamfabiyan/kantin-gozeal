@@ -144,6 +144,44 @@ export function AdminDashboard() {
           </div>
         ) : null}
 
+        {/* Low Stock Alert Banner */}
+        {stats && stats.lowStockCount > 0 && (() => {
+          const lowStockVariants = [
+            ...(stats.foodStock || []),
+            ...(stats.drinkStock || []),
+          ].filter(v => v.stock <= 5 && v.active)
+          return (
+            <div className="rounded-lg border-2 border-red-300 bg-red-50 dark:bg-red-950/30 p-3 sm:p-4">
+              <div className="flex items-start gap-2 sm:gap-3">
+                <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-red-800 dark:text-red-300 text-sm">
+                    {stats.lowStockCount} Variant Stok Menipis
+                  </p>
+                  <p className="text-xs text-red-600 dark:text-red-400 mb-2">
+                    Segera lakukan restock untuk variant berikut:
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {lowStockVariants.map(v => (
+                      <span
+                        key={v.id}
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${
+                          v.stock === 0
+                            ? 'bg-red-200 text-red-800 dark:bg-red-900/50 dark:text-red-300'
+                            : 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300'
+                        }`}
+                      >
+                        {v.type === 'FOOD' ? '🍪' : '🥤'} {v.name}: {v.stock}
+                        {v.stock === 0 && ' (HABIS)'}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        })()}
+
         {/* Charts */}
         {stats && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 sm:gap-4">
