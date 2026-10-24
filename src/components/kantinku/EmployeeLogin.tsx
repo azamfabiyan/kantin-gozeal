@@ -9,7 +9,7 @@ import { EmployeeLayout } from './EmployeeLayout'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
-import { Loader2, User, Shield, Info, CheckCircle2 } from 'lucide-react'
+import { Loader2, User, Shield, Info, CheckCircle2, Tv } from 'lucide-react'
 import { toast } from 'sonner'
 
 export function EmployeeLogin() {
@@ -119,14 +119,22 @@ export function EmployeeLogin() {
             </div>
           </div>
 
-          {/* Admin link - compact */}
-          <div className="text-center">
+          {/* Quick links - Admin & TV */}
+          <div className="flex items-center justify-center gap-4">
             <button
               onClick={() => setRoute('admin/login')}
               className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-md hover:bg-muted/50"
             >
               <Shield className="w-3.5 h-3.5" />
-              Login Admin
+              Admin
+            </button>
+            <span className="text-muted-foreground/30">|</span>
+            <button
+              onClick={() => setRoute('tv')}
+              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-md hover:bg-muted/50"
+            >
+              <Tv className="w-3.5 h-3.5" />
+              Dashboard TV
             </button>
           </div>
         </div>
