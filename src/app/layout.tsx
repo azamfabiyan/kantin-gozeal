@@ -13,8 +13,15 @@ export const metadata: Metadata = {
   description: "Sistem Manajemen Jatah Makanan & Minuman Karyawan Kantin Gozeal",
   keywords: ["Kantin Gozeal", "kantin", "karyawan", "makanan", "minuman"],
   authors: [{ name: "Kantin Gozeal" }],
+  manifest: "/manifest.json",
   icons: {
     icon: "/gozeal-logo.png",
+    apple: "/apple-touch-icon.png",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Kantin Gozeal",
   },
 };
 
@@ -23,6 +30,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   maximumScale: 5,
+  themeColor: "#1a1a1a",
 };
 
 export default function RootLayout({
@@ -37,6 +45,19 @@ export default function RootLayout({
       >
         {children}
         <SonnerToaster position="top-center" richColors closeButton />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js').catch(function(e) {
+                    console.warn('SW registration failed:', e);
+                  });
+                });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );

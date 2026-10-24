@@ -10,6 +10,7 @@ import { AdminDashboard } from '@/components/kantinku/AdminDashboard'
 import { AdminEmployees } from '@/components/kantinku/AdminEmployees'
 import { AdminVariants } from '@/components/kantinku/AdminVariants'
 import { AdminReports } from '@/components/kantinku/AdminReports'
+import TVDashboard from '@/components/kantinku/TVDashboard'
 
 export default function Home() {
   const route = useRouter((s) => s.route)
@@ -45,6 +46,8 @@ function renderRoute(route: string) {
       return <AdminVariants />
     case 'admin/reports':
       return <AdminReports />
+    case 'tv':
+      return <TVDashboard />
     default:
       return <EmployeeLogin />
   }

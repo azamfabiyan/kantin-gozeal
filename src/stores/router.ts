@@ -14,7 +14,7 @@ function parseHash(): string {
   const valid = [
     'karyawan/login', 'karyawan/dashboard', 'karyawan/history',
     'admin/login', 'admin/dashboard', 'admin/employees', 'admin/variants', 'admin/reports',
-    'scan', 'picker',
+    'scan', 'picker', 'tv',
   ]
   if (valid.includes(hash)) return hash
   return 'karyawan/login'
