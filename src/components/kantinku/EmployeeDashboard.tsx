@@ -141,7 +141,7 @@ export function EmployeeDashboard() {
                   <span className="text-xs sm:text-sm font-medium text-muted-foreground">Makanan</span>
                 </div>
                 <div className="text-2xl sm:text-3xl font-bold">
-                  {data.foodTaken}<span className="text-base text-muted-foreground">/6</span>
+                  {data.foodTaken}<span className="text-base text-muted-foreground">/{data.foodVariants.length}</span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">diambil periode ini</p>
               </CardContent>
@@ -153,7 +153,7 @@ export function EmployeeDashboard() {
                   <span className="text-xs sm:text-sm font-medium text-muted-foreground">Minuman</span>
                 </div>
                 <div className="text-2xl sm:text-3xl font-bold">
-                  {data.drinkTaken}<span className="text-base text-muted-foreground">/4</span>
+                  {data.drinkTaken}<span className="text-base text-muted-foreground">/{data.drinkVariants.length}</span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">diambil periode ini</p>
               </CardContent>
