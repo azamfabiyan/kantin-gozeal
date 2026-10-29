@@ -252,11 +252,11 @@ export function AdminEmployees() {
                     <div className="flex items-center gap-3 mt-1.5 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Utensils className="w-3 h-3" />
-                        {e.foodPickups}/6
+                        {e.foodPickups} diambil
                       </span>
                       <span className="flex items-center gap-1">
                         <CupSoda className="w-3 h-3" />
-                        {e.drinkPickups}/4
+                        {e.drinkPickups} diambil
                       </span>
                       {e.dateOfBirth && (
                         <span className="flex items-center gap-1">
