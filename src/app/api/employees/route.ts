@@ -89,15 +89,29 @@ export async function POST(req: NextRequest) {
     const nowIso = new Date().toISOString()
 
     if (isTurso && turso) {
-      // Generate next employee code (count + 1)
-      const cntR = await turso.execute('SELECT COUNT(*) as cnt FROM Employee')
-      const count = Number((cntR.rows[0] as { cnt: number | bigint }).cnt)
-      const code = `EMP${String(count + 1).padStart(3, '0')}`
+      // Generate unique employee code - find max number and +1
+      const codesR = await turso.execute('SELECT code FROM Employee ORDER BY code DESC LIMIT 1')
+      let nextNum = 1
+      if (codesR.rows.length > 0) {
+        const lastCode = String((codesR.rows[0] as { code: string }).code)
+        const match = lastCode.match(/EMP(\d+)/)
+        if (match) nextNum = parseInt(match[1], 10) + 1
+      }
+      const code = `EMP${String(nextNum).padStart(3, '0')}`
       const id = genId()
       await turso.execute({
         sql: 'INSERT INTO Employee (id, code, name, dateOfBirth, active, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)',
         args: [id, code, trimmedName, dateOfBirth || null, activeFlag ? 1 : 0, nowIso, nowIso],
       })
+      // Auto-create EmployeeBalance (saldo=1) untuk semua variant aktif
+      const variants = await turso.execute('SELECT id FROM Variant WHERE active = 1')
+      const balanceStmts = variants.rows.map((v) => ({
+        sql: 'INSERT OR IGNORE INTO EmployeeBalance (id, employeeId, variantId, balance, createdAt, updatedAt) VALUES (?, ?, ?, 1, ?, ?)',
+        args: [genId(), id, String(v.id), nowIso, nowIso],
+      }))
+      if (balanceStmts.length > 0) {
+        await turso.batch(balanceStmts)
+      }
       await broadcastEvent('employee:changed', { id, action: 'create' })
       return Response.json({
         employee: { id, code, name: trimmedName, dateOfBirth: dateOfBirth || null, active: activeFlag },
@@ -105,10 +119,22 @@ export async function POST(req: NextRequest) {
     }
 
     // Prisma mode (local dev)
-    const count = await (db as PrismaClient).employee.count()
-    const code = `EMP${String(count + 1).padStart(3, '0')}`
+    // Find max code number + 1
+    const lastEmp = await (db as PrismaClient).employee.findFirst({ orderBy: { code: 'desc' } })
+    let nextNum = 1
+    if (lastEmp) {
+      const match = lastEmp.code.match(/EMP(d+)/)
+      if (match) nextNum = parseInt(match[1], 10) + 1
+    }
+    const code = `EMP${String(nextNum).padStart(3, '0')}`
     const emp = await (db as PrismaClient).employee.create({
       data: { code, name: trimmedName, dateOfBirth: dateOfBirth || null, active: activeFlag },
+    })
+    // Auto-create EmployeeBalance
+    const activeVariants = await (db as PrismaClient).variant.findMany({ where: { active: true } })
+    await (db as PrismaClient).employeeBalance.createMany({
+      data: activeVariants.map((v) => ({ employeeId: emp.id, variantId: v.id, balance: 1 })),
+      skipDuplicates: true,
     })
     await broadcastEvent('employee:changed', { id: emp.id, action: 'create' })
     return Response.json({
